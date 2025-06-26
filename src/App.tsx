@@ -5,34 +5,41 @@ import { ChatHistory } from "./components/ChatHistory";
 import { InputField } from "./components/InputField";
 import { Spinner } from "./components/Spinner";
 import type { Message } from "./components/types";
+import { Cat } from "./lib/cat";
+
+const cat = new Cat();
 
 export const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (input.trim() === "" || isLoading) return;
 
     const newMessage: Message = {
-      id: messages.length + 1,
-      text: input,
+      id: Date.now(),
+      text: input.trim(),
       sender: "user",
     };
 
-    setMessages([...messages, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setInput("");
     setIsLoading(true);
 
-    setTimeout(() => {
-      const response: Message = {
-        id: messages.length + 2,
-        text: "ﾆｬｰ",
-        sender: "cat",
-      };
-      setMessages((prev) => [...prev, response]);
-      setIsLoading(false);
-    }, 500);
+    await cat
+      .response(newMessage.text)
+      .then((response) => {
+        const message: Message = {
+          id: Date.now(),
+          text: response,
+          sender: "cat",
+        };
+        setMessages((prev) => [...prev, message]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
