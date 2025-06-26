@@ -16,7 +16,7 @@ describe("Cat", () => {
 
   test("should respond with affection sounds for affection messages", async () => {
     const affectionMessages = ["可愛いね", "好きだよ", "撫でて"];
-    const affectionSounds = ["ﾆｬｵ～ﾝ", "ﾐｬｵ～", "ﾆｬﾝﾆｬﾝ"];
+    const affectionSounds = ["ﾆｬｵ~ﾝ", "ﾐｬｵ~", "ﾆｬﾝﾆｬﾝ"];
 
     for (const message of affectionMessages) {
       const response = await cat.response(message);
@@ -26,7 +26,7 @@ describe("Cat", () => {
 
   test("should respond with satisfaction sounds for satisfaction messages", async () => {
     const satisfactionMessages = ["ありがとう", "嬉しい", "素晴らしい"];
-    const satisfactionSounds = ["ｺﾞﾛｺﾞﾛ", "ﾆｬ～"];
+    const satisfactionSounds = ["ｺﾞﾛｺﾞﾛ", "ﾆｬ~"];
 
     for (const message of satisfactionMessages) {
       const response = await cat.response(message);
@@ -56,7 +56,7 @@ describe("Cat", () => {
 
   test("should respond with sleepy sounds for sleepy messages", async () => {
     const sleepyMessages = ["眠い", "疲れた", "おやすみ"];
-    const sleepySounds = ["ﾆｬ…", "ﾌﾆｬ～", "ﾆｬ～ﾝ"];
+    const sleepySounds = ["ﾆｬ…", "ﾌﾆｬ~", "ﾆｬ~ﾝ"];
 
     for (const message of sleepyMessages) {
       const response = await cat.response(message);

@@ -88,8 +88,13 @@ export class Cat {
     return responses[index] as string;
   }
 
+  private getRandomThinkingTime(): number {
+    return Math.floor(Math.random() * 1000) + 300; // 300-1300ms
+  }
+
   async response(message: string): Promise<string> {
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const thinkingTime = this.getRandomThinkingTime();
+    await new Promise((resolve) => setTimeout(resolve, thinkingTime));
 
     const emotion = this.detectEmotion(message);
     return this.getRandomResponse(emotion);
