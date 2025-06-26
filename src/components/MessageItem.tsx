@@ -7,10 +7,12 @@ interface MessageItemProps {
 }
 
 export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
+  const isUser = message.sender === "user";
+
   return (
-    <Box marginBottom={1}>
-      <Text color={message.sender === "user" ? "cyan" : "green"}>
-        {message.text}
+    <Box marginBottom={1} paddingLeft={isUser ? 0 : 2}>
+      <Text color={isUser ? "gray" : "green"}>
+        {isUser ? `> ${message.text}` : message.text}
       </Text>
     </Box>
   );
