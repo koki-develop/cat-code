@@ -8,7 +8,6 @@ const program = new Command();
 program
   .name("cat-code")
   .version(packageJson.version)
-  .description("A simple chat CLI tool")
   .action(() => {
     render(<App />);
   });
