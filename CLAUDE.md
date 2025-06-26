@@ -9,6 +9,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Format**: `bun run fmt` - Formats code using Biome with unsafe fixes
 - **Type check**: `bun run typecheck` - Runs TypeScript compiler without emitting files
 - **Test locally**: `bun run ./dist/index.js` - Run the built CLI locally
+- **Run tests**: `bun test` - Runs all test files (*.spec.ts)
+- **Run single test**: `bun test src/lib/util.spec.ts` - Run specific test file
 
 ## Project Architecture
 
@@ -19,10 +21,13 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
 - **Chat Application** (`src/App.tsx`): Main state management component for messages and loading state
 - **UI Components** (`src/components/`): Modular React components for terminal UI
   - `ChatHistory.tsx`: Message list rendering using Ink's Static component
-  - `MessageItem.tsx`: Individual message display component
-  - `InputField.tsx`: Text input with prompt styling
+  - `MessageItem.tsx`: Individual message display component with multi-line indent support
+  - `InputField.tsx`: Text input with prompt styling and border
   - `Spinner.tsx`: Loading indicator during cat responses
   - `types.ts`: Shared TypeScript interfaces
+- **Business Logic** (`src/lib/`): Core functionality and utilities
+  - `cat.ts`: Cat class with async response generation
+  - `util.ts`: Reusable utility functions (e.g., indent for text formatting)
 - **Build System** (`scripts/build.ts`): Custom Bun build script that creates executable CLI binary
 
 ### Technology Stack
@@ -37,9 +42,11 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
 
 ### Chat UI Design Patterns
 - **Message Persistence**: Uses Ink's `<Static>` component to render chat history that doesn't re-render
-- **Loading States**: Displays spinner with "Thinking..." during cat response delay
+- **Loading States**: Displays cyan spinner with "Thinking..." during cat response delay
 - **Input Management**: Disables cursor and prevents duplicate submissions during loading
-- **Cat Behavior**: Always responds with "ﾆｬｰ" after a 500ms delay to simulate thinking
+- **Cat Behavior**: Cat class provides async responses with "ﾆｬｰ" after 500ms delay
+- **Message Styling**: User messages prefixed with "> " in gray, cat messages in cyan with left padding
+- **Multi-line Support**: User messages use indent utility for proper 2+ line formatting
 
 ### Build Process
 The build process creates a standalone executable CLI tool:
@@ -50,10 +57,11 @@ The build process creates a standalone executable CLI tool:
 
 ### Component Architecture
 The codebase follows a modular component structure:
-- **State Management**: Centralized in `App.tsx` using React hooks
+- **State Management**: Centralized in `App.tsx` using React hooks with Date.now() for unique message IDs
 - **Component Separation**: Each UI piece is a separate component with clear responsibilities
 - **Type Safety**: Shared types in `components/types.ts` for consistency
 - **Prop Interface**: Components receive specific props rather than accessing global state
+- **Utility Functions**: Common functions in `src/lib/util.ts` with comprehensive test coverage
 
 ## Development Notes
 
@@ -62,6 +70,8 @@ The codebase follows a modular component structure:
 - Biome is configured with strict rules including unused variable/import detection
 - Package is configured as ESM with `"type": "module"`
 - Binary is published as `cat-code` command via `bin` field in package.json
-- Message state uses simple array with auto-incrementing IDs (length + 1/2)
-- Color scheme: cyan for user messages, green for cat messages, yellow for prompt
+- Message state uses simple array with Date.now() IDs to prevent duplicates
+- Color scheme: gray for user messages, cyan for cat messages and spinner, yellow for input prompt
 - Components are split into separate files in `src/components/` for maintainability
+- Test files use `.spec.ts` naming convention and bun:test framework
+- Utility functions follow options-object pattern for extensibility
