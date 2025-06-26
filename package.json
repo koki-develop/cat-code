@@ -27,9 +27,11 @@
   "dependencies": {
     "chalk": "5.4.1",
     "commander": "14.0.0",
+    "glob": "11.0.3",
     "ink": "6.0.1",
     "ink-spinner": "5.0.0",
-    "react": "19.1.0"
+    "react": "19.1.0",
+    "simple-git": "3.28.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.5",
