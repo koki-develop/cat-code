@@ -1,14 +1,10 @@
-import { Box, Static, Text } from "ink";
-import Spinner from "ink-spinner";
-import TextInput from "ink-text-input";
+import { Box } from "ink";
 import type React from "react";
 import { useState } from "react";
-
-interface Message {
-  id: number;
-  text: string;
-  sender: "user" | "cat";
-}
+import { ChatHistory } from "./components/ChatHistory";
+import { InputField } from "./components/InputField";
+import { Spinner } from "./components/Spinner";
+import type { Message } from "./components/types";
 
 export const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -41,30 +37,14 @@ export const App: React.FC = () => {
 
   return (
     <Box flexDirection="column">
-      <Static items={messages}>
-        {(message) => (
-          <Box key={message.id} marginBottom={1}>
-            <Text color={message.sender === "user" ? "cyan" : "green"}>
-              {message.text}
-            </Text>
-          </Box>
-        )}
-      </Static>
-      {isLoading && (
-        <Box>
-          <Spinner type="dots" />
-          <Text> Thinking...</Text>
-        </Box>
-      )}
-      <Box>
-        <Text color="yellow">&gt; </Text>
-        <TextInput
-          value={input}
-          onChange={setInput}
-          onSubmit={handleSubmit}
-          showCursor={!isLoading}
-        />
-      </Box>
+      <ChatHistory messages={messages} />
+      {isLoading && <Spinner />}
+      <InputField
+        value={input}
+        onChange={setInput}
+        onSubmit={handleSubmit}
+        showCursor={!isLoading}
+      />
     </Box>
   );
 };
