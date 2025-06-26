@@ -1,4 +1,5 @@
 import { Box, Static, Text } from "ink";
+import Spinner from "ink-spinner";
 import TextInput from "ink-text-input";
 import type React from "react";
 import { useState } from "react";
@@ -12,9 +13,10 @@ interface Message {
 export const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
-    if (input.trim() === "") return;
+    if (input.trim() === "" || isLoading) return;
 
     const newMessage: Message = {
       id: messages.length + 1,
@@ -24,6 +26,7 @@ export const App: React.FC = () => {
 
     setMessages([...messages, newMessage]);
     setInput("");
+    setIsLoading(true);
 
     setTimeout(() => {
       const response: Message = {
@@ -32,6 +35,7 @@ export const App: React.FC = () => {
         sender: "cat",
       };
       setMessages((prev) => [...prev, response]);
+      setIsLoading(false);
     }, 500);
   };
 
@@ -46,9 +50,20 @@ export const App: React.FC = () => {
           </Box>
         )}
       </Static>
+      {isLoading && (
+        <Box>
+          <Spinner type="dots" />
+          <Text> Thinking...</Text>
+        </Box>
+      )}
       <Box>
         <Text color="yellow">&gt; </Text>
-        <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
+        <TextInput
+          value={input}
+          onChange={setInput}
+          onSubmit={handleSubmit}
+          showCursor={!isLoading}
+        />
       </Box>
     </Box>
   );
