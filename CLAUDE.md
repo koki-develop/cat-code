@@ -21,8 +21,8 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
 - **Chat Application** (`src/App.tsx`): Main state management component for messages and loading state
 - **UI Components** (`src/components/`): Modular React components for terminal UI
   - `ChatHistory.tsx`: Message list rendering using Ink's Static component
-  - `MessageItem.tsx`: Individual message display component with multi-line indent support
-  - `InputField.tsx`: Text input with prompt styling and border
+  - `MessageItem.tsx`: Individual message display component with multi-line indent support, user messages prefixed with "> ", cat messages with "⏺"
+  - `InputField.tsx`: Custom text input with advanced terminal-style keybindings using `useInput` hook
   - `Spinner.tsx`: Loading indicator during cat responses
   - `types.ts`: Shared TypeScript interfaces
 - **Business Logic** (`src/lib/`): Core functionality and utilities
@@ -33,20 +33,26 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
 ### Technology Stack
 - **Runtime**: Bun (primary development runtime)
 - **CLI Framework**: Commander.js for argument parsing
-- **Terminal UI**: Ink (React for CLIs) with community components:
-  - `ink-text-input` for user input
+- **Terminal UI**: Ink (React for CLIs) with built-in hooks
   - `ink-spinner` for loading states
 - **Build Tool**: Custom Bun build script that creates executable CLI binary
 - **Linting/Formatting**: Biome (replaces ESLint + Prettier)
 - **Package Manager**: Bun with lockfile management
+
+### InputField Keybindings
+The custom InputField component supports comprehensive terminal-style keybindings:
+- **Cursor Movement**: Arrow keys, Ctrl+b/f (left/right), Ctrl+n/p (up/down), Ctrl+a/e (home/end)
+- **Text Editing**: Backspace/Delete (delete before cursor), Ctrl+d (delete at cursor), Ctrl+w (delete word), Ctrl+u (delete to line start), Ctrl+k (delete to line end), Ctrl+l (clear input)
+- **Multi-line Support**: Full cursor navigation and editing across multiple lines
+- **Ink Quirk**: Both `key.backspace` and `key.delete` events represent the physical backspace key
 
 ### Chat UI Design Patterns
 - **Message Persistence**: Uses Ink's `<Static>` component to render chat history that doesn't re-render
 - **Loading States**: Displays cyan spinner with "Thinking..." during cat response delay
 - **Input Management**: Disables cursor and prevents duplicate submissions during loading
 - **Cat Behavior**: Cat class provides async responses with "ﾆｬｰ" after 500ms delay
-- **Message Styling**: User messages prefixed with "> " in gray, cat messages in cyan with left padding
-- **Multi-line Support**: User messages use indent utility for proper 2+ line formatting
+- **Message Styling**: User messages prefixed with "> " in gray, cat messages prefixed with "⏺ " in cyan
+- **Multi-line Support**: Both user and cat messages use indent utility for proper 2+ line formatting
 
 ### Build Process
 The build process creates a standalone executable CLI tool:
