@@ -4,7 +4,7 @@ import packageJson from "../package.json" with { type: "json" };
 const program = new Command();
 
 program
-  .name("TODO")
+  .name("cat-code")
   .version(packageJson.version)
   .action(() => {
     console.log("hello world");

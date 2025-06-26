@@ -1,17 +1,17 @@
 {
-  "name": "ts-cli-template",
+  "name": "cat-code",
   "module": "src/index.ts",
   "type": "module",
   "version": "0.0.0",
   "author": "koki-develop <kou.pg.0131@gmail.com>",
-  "homepage": "https://github.com/koki-develop/TODO",
+  "homepage": "https://github.com/koki-develop/cat-code",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/koki-develop/TODO.git"
+    "url": "git+https://github.com/koki-develop/cat-code.git"
   },
   "license": "MIT",
   "bin": {
-    "TODO": "dist/index.js"
+    "cat-code": "dist/index.js"
   },
   "files": [
     "dist"

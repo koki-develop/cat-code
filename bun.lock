@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "ts-cli-template",
+      "name": "cat-code",
       "dependencies": {
         "commander": "14.0.0",
       },
