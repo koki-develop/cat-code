@@ -4,7 +4,7 @@ await $`rm -rf dist`;
 
 await Bun.build({
   banner: "#!/usr/bin/env node",
-  entrypoints: ["./src/index.ts"],
+  entrypoints: ["./src/index.tsx"],
   outdir: "./dist",
   target: "node",
   packages: "external",
