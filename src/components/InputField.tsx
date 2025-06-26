@@ -23,6 +23,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         onChange={onChange}
         onSubmit={onSubmit}
         showCursor={showCursor}
+        placeholder="Talk to the cat..."
       />
     </Box>
   );
