@@ -6,17 +6,11 @@ import { useState } from "react";
 interface Message {
   id: number;
   text: string;
-  sender: "user" | "assistant";
+  sender: "user" | "cat";
 }
 
 export const App: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "こんにちは！何かお手伝いできることはありますか？",
-      sender: "assistant",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
 
   const handleSubmit = () => {
@@ -31,12 +25,11 @@ export const App: React.FC = () => {
     setMessages([...messages, newMessage]);
     setInput("");
 
-    // シンプルな応答を追加
     setTimeout(() => {
       const response: Message = {
         id: messages.length + 2,
-        text: `「${input}」についてお答えします。`,
-        sender: "assistant",
+        text: "ﾆｬｰ",
+        sender: "cat",
       };
       setMessages((prev) => [...prev, response]);
     }, 500);
@@ -48,14 +41,13 @@ export const App: React.FC = () => {
         {(message) => (
           <Box key={message.id} marginBottom={1}>
             <Text color={message.sender === "user" ? "cyan" : "green"}>
-              {message.sender === "user" ? "あなた" : "アシスタント"}:{" "}
               {message.text}
             </Text>
           </Box>
         )}
       </Static>
       <Box>
-        <Text color="yellow">入力: </Text>
+        <Text color="yellow">&gt; </Text>
         <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
       </Box>
     </Box>
