@@ -16,7 +16,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   showCursor,
 }) => {
   return (
-    <Box>
+    <Box borderStyle="single" borderColor="gray" paddingX={1}>
       <Text color="yellow">&gt; </Text>
       <TextInput
         value={value}
