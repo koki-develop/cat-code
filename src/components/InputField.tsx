@@ -53,7 +53,8 @@ export const InputField: React.FC<InputFieldProps> = ({
       return;
     }
 
-    if (key.backspace) {
+    // Backspace - delete character before cursor
+    if (key.backspace || key.delete) {
       if (cursorPosition > 0) {
         const newValue =
           value.slice(0, cursorPosition - 1) + value.slice(cursorPosition);
@@ -62,8 +63,8 @@ export const InputField: React.FC<InputFieldProps> = ({
       return;
     }
 
-    // Delete character at cursor position (Delete key and Ctrl+d)
-    if (key.delete || (key.ctrl && input === "d")) {
+    // Delete character at cursor position (Ctrl+d)
+    if (key.ctrl && input === "d") {
       if (cursorPosition < value.length) {
         const newValue =
           value.slice(0, cursorPosition) + value.slice(cursorPosition + 1);
