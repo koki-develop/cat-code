@@ -16,7 +16,13 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
 
 ### Core Components
 - **CLI Entry Point** (`src/index.tsx`): Commander.js setup that renders the Ink app
-- **Chat Application** (`src/App.tsx`): React-based terminal UI using Ink framework
+- **Chat Application** (`src/App.tsx`): Main state management component for messages and loading state
+- **UI Components** (`src/components/`): Modular React components for terminal UI
+  - `ChatHistory.tsx`: Message list rendering using Ink's Static component
+  - `MessageItem.tsx`: Individual message display component
+  - `InputField.tsx`: Text input with prompt styling
+  - `Spinner.tsx`: Loading indicator during cat responses
+  - `types.ts`: Shared TypeScript interfaces
 - **Build System** (`scripts/build.ts`): Custom Bun build script that creates executable CLI binary
 
 ### Technology Stack
@@ -42,12 +48,12 @@ The build process creates a standalone executable CLI tool:
 3. Adds Node.js shebang for CLI execution
 4. Makes output executable with chmod +x
 
-### Key Files
-- `src/index.tsx` - Main entry point with Commander.js CLI setup (TSX for JSX support)
-- `src/App.tsx` - Main chat UI component with React hooks and Ink components
-- `scripts/build.ts` - Custom build script that outputs to `dist/` with shebang
-- `biome.json` - Biome configuration for linting and formatting
-- `tsconfig.json` - TypeScript configuration optimized for bundler mode with JSX support
+### Component Architecture
+The codebase follows a modular component structure:
+- **State Management**: Centralized in `App.tsx` using React hooks
+- **Component Separation**: Each UI piece is a separate component with clear responsibilities
+- **Type Safety**: Shared types in `components/types.ts` for consistency
+- **Prop Interface**: Components receive specific props rather than accessing global state
 
 ## Development Notes
 
@@ -58,3 +64,4 @@ The build process creates a standalone executable CLI tool:
 - Binary is published as `cat-code` command via `bin` field in package.json
 - Message state uses simple array with auto-incrementing IDs (length + 1/2)
 - Color scheme: cyan for user messages, green for cat messages, yellow for prompt
+- Components are split into separate files in `src/components/` for maintainability
