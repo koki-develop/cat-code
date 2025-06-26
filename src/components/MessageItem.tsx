@@ -1,5 +1,6 @@
 import { Box, Text } from "ink";
 import type React from "react";
+import { indent } from "../lib/util";
 import type { Message } from "./types";
 
 interface MessageItemProps {
@@ -12,7 +13,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
   return (
     <Box marginBottom={1} paddingLeft={isUser ? 0 : 2}>
       <Text color={isUser ? "gray" : "cyan"}>
-        {isUser ? `> ${message.text}` : message.text}
+        {isUser ? `> ${indent(message.text)}` : message.text}
       </Text>
     </Box>
   );
