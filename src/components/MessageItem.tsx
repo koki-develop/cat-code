@@ -11,7 +11,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
 
   return (
     <Box marginBottom={1} paddingLeft={isUser ? 0 : 2}>
-      <Text color={isUser ? "gray" : "green"}>
+      <Text color={isUser ? "gray" : "cyan"}>
         {isUser ? `> ${message.text}` : message.text}
       </Text>
     </Box>

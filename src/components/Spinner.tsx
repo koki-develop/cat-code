@@ -4,9 +4,11 @@ import type React from "react";
 
 export const Spinner: React.FC = () => {
   return (
-    <Box>
-      <InkSpinner type="dots" />
-      <Text> Thinking...</Text>
+    <Box marginBottom={1} paddingLeft={2}>
+      <Text color="cyan">
+        <InkSpinner type="dots" />
+      </Text>
+      <Text color="yellow"> Thinking...</Text>
     </Box>
   );
 };
