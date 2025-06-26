@@ -11,9 +11,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
   const isUser = message.sender === "user";
 
   return (
-    <Box marginBottom={1} paddingLeft={isUser ? 0 : 2}>
+    <Box marginBottom={1} paddingLeft={1}>
       <Text color={isUser ? "gray" : "cyan"}>
-        {isUser ? `> ${indent(message.text)}` : message.text}
+        {isUser ? `> ${indent(message.text)}` : `⏺ ${indent(message.text)}`}
       </Text>
     </Box>
   );
