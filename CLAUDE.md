@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Test locally**: `bun run ./dist/index.js` - Run the built CLI locally
 - **Run tests**: `bun test` - Runs all test files (*.spec.ts)
 - **Run single test**: `bun test src/lib/util.spec.ts` - Run specific test file
+- **Test cat**: `bun test src/lib/cat.spec.ts` - Run cat vocabulary and emotion detection tests
 
 ## Project Architecture
 
@@ -26,7 +27,7 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
   - `Spinner.tsx`: Loading indicator during cat responses
   - `types.ts`: Shared TypeScript interfaces
 - **Business Logic** (`src/lib/`): Core functionality and utilities
-  - `cat.ts`: Cat class with async response generation
+  - `cat.ts`: Cat class with emotion-based response generation and vocabulary system
   - `util.ts`: Reusable utility functions (e.g., indent for text formatting)
 - **Build System** (`scripts/build.ts`): Custom Bun build script that creates executable CLI binary
 
@@ -50,7 +51,7 @@ The custom InputField component supports comprehensive terminal-style keybinding
 - **Message Persistence**: Uses Ink's `<Static>` component to render chat history that doesn't re-render
 - **Loading States**: Displays cyan spinner with "Thinking..." during cat response delay
 - **Input Management**: Disables cursor and prevents duplicate submissions during loading
-- **Cat Behavior**: Cat class provides async responses with "ﾆｬｰ" after 500ms delay
+- **Cat Behavior**: Cat class provides contextual responses based on detected emotions, with 500ms delay for realistic interaction
 - **Message Styling**: User messages prefixed with "> " in gray, cat messages prefixed with "⏺ " in cyan
 - **Multi-line Support**: Both user and cat messages use indent utility for proper 2+ line formatting
 
@@ -81,3 +82,28 @@ The codebase follows a modular component structure:
 - Components are split into separate files in `src/components/` for maintainability
 - Test files use `.spec.ts` naming convention and bun:test framework
 - Utility functions follow options-object pattern for extensibility
+
+## Cat Intelligence System
+
+The cat response system uses emotion detection and vocabulary mapping:
+
+### Emotion Detection
+- **Keyword Matching**: User input is analyzed for emotional keywords (case-insensitive)
+- **7 Categories**: greeting, affection, satisfaction, excitement, playful, sleepy, hungry
+- **Fallback**: Unrecognized input defaults to basic cat sounds
+
+### Vocabulary System
+- **Half-width Katakana**: All responses use consistent ﾆｬｰ-style formatting
+- **Contextual Responses**: Each emotion category has 2-3 unique vocalizations
+- **Random Selection**: Responses are randomly chosen from appropriate category
+- **Expandable**: New emotions and sounds can be easily added to vocabulary maps
+
+### Cat Response Patterns
+- **Greeting**: ﾆｬｯ, ﾐｬｯ, ﾆｬ (for hellos, introductions)
+- **Affection**: ﾆｬｵ~ﾝ, ﾐｬｵ~, ﾆｬﾝﾆｬﾝ (for love, cute, petting)
+- **Satisfaction**: ｺﾞﾛｺﾞﾛ, ﾆｬ~ (for thanks, happiness)
+- **Excitement**: ﾆｬﾆｬﾆｬ!, ﾐｬｰ!, ﾆｬｯﾆｬｯ (for play, fun)
+- **Playful**: ﾆｬｰﾝ, ﾐｬﾐｬ, ﾆｬｵｯ (for games, toys)
+- **Sleepy**: ﾆｬ…, ﾌﾆｬ~, ﾆｬ~ﾝ (for tired, sleep)
+- **Hungry**: ﾆｬｵｫﾝ, ﾐｬｰｵ, ﾆｬﾝﾆｬﾝ! (for food, eating)
+- **Default**: ﾆｬｰ, ﾆｬﾝ, ﾐｬｰ (for unrecognized input)
