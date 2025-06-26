@@ -12,7 +12,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
 
   return (
     <Box marginBottom={1} paddingLeft={1}>
-      <Text color={isUser ? "gray" : "cyan"}>
+      <Text color={isUser ? "gray" : undefined}>
         {isUser ? `> ${indent(message.text)}` : `⏺ ${indent(message.text)}`}
       </Text>
     </Box>
