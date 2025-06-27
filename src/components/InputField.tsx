@@ -183,6 +183,13 @@ export const InputField: React.FC<InputFieldProps> = ({
       return;
     }
 
+    // Line break (Ctrl+j)
+    if (key.ctrl && input === "j") {
+      const newValue = `${value.slice(0, cursorPosition)}\n${value.slice(cursorPosition)}`;
+      updateValue(newValue, cursorPosition + 1);
+      return;
+    }
+
     // Regular character input
     if (input && !key.ctrl && !key.meta) {
       const newValue =
@@ -227,9 +234,20 @@ export const InputField: React.FC<InputFieldProps> = ({
   }, [value, cursorPosition, showCursor]);
 
   return (
-    <Box borderStyle="single" borderColor="gray" paddingX={1}>
-      <Text color="yellow">&gt; </Text>
-      {renderText}
+    <Box flexDirection="column">
+      <Box borderStyle="single" borderColor="gray" paddingX={1}>
+        <Text color="yellow">&gt; </Text>
+        {renderText}
+      </Box>
+      <Box paddingX={1}>
+        <Text color="gray">
+          <Text>Ctrl+J: New line</Text>
+          <Text dimColor> / </Text>
+          <Text>Enter: Send</Text>
+          <Text dimColor> / </Text>
+          <Text>Ctrl+C: Exit</Text>
+        </Text>
+      </Box>
     </Box>
   );
 };
