@@ -1,3 +1,6 @@
+import type { Action } from "../components/types";
+import { FileEditor } from "./fileEditor";
+
 type CatVocabulary = {
   [key: string]: string[];
 };
@@ -6,7 +9,14 @@ type EmotionKeywords = {
   [key: string]: string[];
 };
 
+type CatResponse = {
+  text: string;
+  action?: Action;
+};
+
 export class Cat {
+  private fileEditor = new FileEditor();
+
   private vocabulary: CatVocabulary = {
     greeting: ["ﾆｬｯ", "ﾐｬｯ", "ﾆｬ"],
     affection: ["ﾆｬｵ~ﾝ", "ﾐｬｵ~", "ﾆｬﾝﾆｬﾝ"],
@@ -92,11 +102,28 @@ export class Cat {
     return Math.floor(Math.random() * 1000) + 300; // 300-1300ms
   }
 
-  async response(message: string): Promise<string> {
+  async response(message: string): Promise<CatResponse> {
     const thinkingTime = this.getRandomThinkingTime();
     await new Promise((resolve) => setTimeout(resolve, thinkingTime));
 
     const emotion = this.detectEmotion(message);
-    return this.getRandomResponse(emotion);
+    const catText = this.getRandomResponse(emotion);
+
+    // Execute file editing with random probability (20% chance)
+    const shouldEditFile = Math.random() < 0.2;
+
+    if (shouldEditFile) {
+      const diff = await this.fileEditor.edit();
+      if (diff) {
+        return {
+          text: catText,
+          action: { type: "edit", diff },
+        };
+      }
+    }
+
+    return {
+      text: catText,
+    };
   }
 }

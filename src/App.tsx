@@ -32,8 +32,9 @@ export const App: React.FC = () => {
       .then((response) => {
         const message: Message = {
           id: Date.now(),
-          text: response,
+          text: response.text,
           sender: "cat",
+          action: response.action,
         };
         setMessages((prev) => [...prev, message]);
       })
