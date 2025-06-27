@@ -10,22 +10,30 @@ interface EditActionProps {
 const formatDiffs = (diffs: EditActionType["diff"]["diffs"]): string => {
   const lines: string[] = [];
 
+  // Calculate max line number width for alignment
+  const maxLineNumber = Math.max(...diffs.map((d) => d.rowNumber));
+  const lineNumberWidth = maxLineNumber.toString().length;
+
   for (let i = 0; i < diffs.length; i++) {
     const diff = diffs[i];
     const nextDiff = diffs[i + 1];
 
     if (!diff) continue;
 
+    const paddedLineNumber = diff.rowNumber
+      .toString()
+      .padStart(lineNumberWidth, " ");
+
     // Deleted line
     if (diff.a !== "") {
       lines.push(
-        `${chalk.gray(diff.rowNumber)} ${chalk.bgAnsi256(52)(`- ${diff.a}`)}`,
+        `${chalk.gray(paddedLineNumber)} ${chalk.bgAnsi256(52)(`- ${diff.a}`)}`,
       );
     }
     // Added line
     if (diff.b !== "") {
       lines.push(
-        `${chalk.gray(diff.rowNumber)} ${chalk.bgAnsi256(22)(`+ ${diff.b}`)}`,
+        `${chalk.gray(paddedLineNumber)} ${chalk.bgAnsi256(22)(`+ ${diff.b}`)}`,
       );
     }
 
