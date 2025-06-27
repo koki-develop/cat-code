@@ -5,24 +5,59 @@ import { glob } from "glob";
 import type { Diff, FileDiff } from "../components/types";
 import { Git } from "./git";
 
+const textFileExtensions: string[] = [
+  "bash",
+
+  "c",
+  "cpp",
+  "cs",
+  "css",
+
+  "go",
+
+  "h",
+  "hpp",
+  "html",
+
+  "ini",
+
+  "java",
+  "js",
+  "json",
+  "jsx",
+
+  "less",
+
+  "md",
+
+  "php",
+  "py",
+
+  "rb",
+  "rs",
+
+  "sass",
+  "scss",
+  "sql",
+  "svg",
+
+  "toml",
+  "ts",
+  "tsx",
+  "txt",
+
+  "xml",
+
+  "yaml",
+  "yml",
+] as const;
+
 export class FileEditor {
   private git = new Git();
   // Text file extension patterns
-  // TODO: enhance these patterns
-  private readonly textFilePatterns = [
-    "**/*.txt",
-    "**/*.md",
-    "**/*.js",
-    "**/*.jsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.json",
-    "**/*.css",
-    "**/*.html",
-    "**/*.xml",
-    "**/*.yml",
-    "**/*.yaml",
-  ];
+  private readonly textFilePatterns = textFileExtensions.map(
+    (ext) => `**/*.${ext}`,
+  );
 
   // Cat word candidates
   private readonly catWords = [
@@ -57,20 +92,7 @@ export class FileEditor {
    */
   private isTextFile(filePath: string): boolean {
     const extension = filePath.split(".").pop()?.toLowerCase();
-    const textExtensions = [
-      "txt",
-      "md",
-      "js",
-      "ts",
-      "tsx",
-      "json",
-      "css",
-      "html",
-      "xml",
-      "yml",
-      "yaml",
-    ];
-    return textExtensions.includes(extension || "");
+    return textFileExtensions.includes(extension || "");
   }
 
   /**
