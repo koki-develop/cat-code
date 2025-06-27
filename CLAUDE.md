@@ -12,6 +12,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run tests**: `bun test` - Runs all test files (*.spec.ts)
 - **Run single test**: `bun test src/lib/util.spec.ts` - Run specific test file
 - **Test cat**: `bun test src/lib/cat.spec.ts` - Run cat vocabulary and emotion detection tests
+- **Development**: `bun run src/index.tsx` - Run the app directly without building
+- **Install globally**: `bun link` - Install as global `cat-code` command for testing
 
 ## Project Architecture
 
@@ -51,9 +53,10 @@ The custom InputField component supports comprehensive terminal-style keybinding
 - **Message Persistence**: Uses Ink's `<Static>` component to render chat history that doesn't re-render
 - **Loading States**: Displays cyan spinner with "Thinking..." during cat response delay
 - **Input Management**: Disables cursor and prevents duplicate submissions during loading
-- **Cat Behavior**: Cat class provides contextual responses based on detected emotions, with 500ms delay for realistic interaction
+- **Cat Behavior**: Cat class provides contextual responses based on detected emotions, with random delay (300-1300ms) for realistic interaction
 - **Message Styling**: User messages prefixed with "> " in gray, cat messages prefixed with "⏺ " in cyan
 - **Multi-line Support**: Both user and cat messages use indent utility for proper 2+ line formatting
+- **Exit Control**: Double Ctrl+C required within 500ms to exit, single Ctrl+C clears input
 
 ### Build Process
 The build process creates a standalone executable CLI tool:
@@ -121,8 +124,9 @@ The cat occasionally "plays" with code files, making random edits and showing di
 ### File Editing Behavior
 - **Trigger Probability**: 20% chance during cat responses (configurable in `cat.ts`)
 - **File Selection**: Prefers git-tracked files, falls back to glob patterns for text files
-- **Cat Word Replacement**: Randomly replaces up to 3 instances of words with cat sounds (ﾆｬｰ, ﾐｬｰ, etc.)
+- **Cat Word Replacement**: Randomly replaces words line-by-line with cat sounds (ﾆｬｰ, ﾐｬｰ, etc.) using streaming for memory efficiency
 - **Supported File Types**: txt, md, js, jsx, ts, tsx, json, css, html, xml, yml, yaml
+- **Memory Optimization**: Uses streaming with per-line processing to handle large files efficiently
 
 ### Diff Display System
 - **ANSI256 Colors**: Uses ansi256(52) for deletions (red background), ansi256(22) for additions (green background)
