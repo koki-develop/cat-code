@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.0](https://github.com/koki-develop/cat-code/compare/v0.0.2...v0.1.0) (2025-06-27)
+
+
+### Features
+
+* Enhance cat vocabulary with new emotions and expressions ([0259403](https://github.com/koki-develop/cat-code/commit/0259403934ec919d306f7250beedb5708e6e18a6))
+
+
+### Bug Fixes
+
+* Add description ([17218da](https://github.com/koki-develop/cat-code/commit/17218dab51702827670600be016635f4d4d2bbd4))
+* Add useMemo for Cat instance and implement screenshot demo behavior ([c1ccf78](https://github.com/koki-develop/cat-code/commit/c1ccf786d28275ce819c882c3076bf8aac6a2193))
+
 ## [0.0.2](https://github.com/koki-develop/cat-code/compare/v0.0.1...v0.0.2) (2025-06-27)
 
 
