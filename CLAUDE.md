@@ -15,6 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Test cat**: `bun test src/lib/cat.spec.ts` - Run cat vocabulary and emotion detection tests
 - **Development**: `bun run src/index.tsx` - Run the app directly without building
 - **Install globally**: `bun link` - Install as global `cat-code` command for testing
+- **Pre-commit hooks**: Automatically runs linting and formatting via Husky
 
 ## Project Architecture
 
@@ -33,6 +34,8 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
   - `cat.ts`: Cat class with emotion-based response generation and vocabulary system
   - `util.ts`: Reusable utility functions (e.g., indent for text formatting)
 - **Build System** (`scripts/build.ts`): Custom Bun build script that creates executable CLI binary
+- **File Editor System** (`src/lib/fileEditor.ts`): Handles random file editing with cat sounds
+- **Git Integration** (`src/lib/git.ts`): Manages git repository detection and file tracking
 
 ### Technology Stack
 - **Runtime**: Bun (primary development runtime)
@@ -42,6 +45,9 @@ This is a terminal-based chat UI CLI tool that simulates a conversation with a c
 - **Build Tool**: Custom Bun build script that creates executable CLI binary
 - **Linting/Formatting**: Biome (replaces ESLint + Prettier)
 - **Package Manager**: Bun with lockfile management
+- **Git Operations**: simple-git for repository interactions
+- **File Pattern Matching**: glob for non-git file discovery
+- **Terminal Styling**: chalk for ANSI color support
 
 ### InputField Keybindings
 The custom InputField component supports comprehensive terminal-style keybindings:
@@ -161,3 +167,10 @@ The application supports a `--safe` flag that prevents actual file modifications
 - **Constructor Pattern**: Cat and FileEditor classes use config object parameters instead of boolean flags
 - **State Propagation**: Safe mode state flows through component hierarchy via props
 - **File Cleanup**: Temporary files are properly cleaned up in safe mode using `unlink()`
+
+## Testing Strategy
+
+- **Test Framework**: Bun's built-in test runner with `.spec.ts` file naming
+- **Current Test Coverage**: Utility functions in `src/lib/util.spec.ts`
+- **Test Location**: Test files are co-located with source files
+- **Run Options**: Single file testing supported with `bun test [file-path]`
