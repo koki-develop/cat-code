@@ -1,6 +1,6 @@
 import { Box, Text, useApp, useInput } from "ink";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChatHistory } from "./components/ChatHistory";
 import { InputField } from "./components/InputField";
 import { Spinner } from "./components/Spinner";
@@ -12,7 +12,7 @@ type AppProps = {
 };
 
 export const App: React.FC<AppProps> = ({ safeMode }) => {
-  const cat = new Cat({ safeMode });
+  const cat = useMemo(() => new Cat({ safeMode }), [safeMode]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
