@@ -1,22 +1,10 @@
-<p align="center">
-<img src="./assets/screenshot.png" alt="Cat Code" width="600px" />
-</p>
+[![NPM Version](https://img.shields.io/npm/v/cat-code)](https://www.npmjs.com/package/cat-code)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/koki-develop/cat-code/release-please.yml)](https://github.com/koki-develop/cat-code/actions/workflows/release-please.yml)
+[![GitHub License](https://img.shields.io/github/license/koki-develop/cat-code)](./LICENSE)
 
-<p align="center">
-<a href="https://www.npmjs.com/package/cat-code">
-  <img src="https://img.shields.io/npm/v/cat-code" alt="NPM Version" />
-</a>
-<a href="https://github.com/koki-develop/cat-code/actions/workflows/release-please.yml">
-  <img src="https://img.shields.io/github/actions/workflow/status/koki-develop/cat-code/release-please.yml" alt="GitHub Actions Workflow Status" />
-</a>
-<a href="./LICENSE">
-  <img src="https://img.shields.io/github/license/koki-develop/cat-code" alt="GitHub License" />
-</a>
-</p>
+<img src="./assets/screenshot.png" width="600px" />
 
-<p align="center">
-Cat Code は猫とともに開発ができる次世代のコーディングエージェントです。
-</p>
+_**Cat Code**_ は猫とともに開発ができる次世代のコーディングエージェントです。
 
 ## 使い方
 
