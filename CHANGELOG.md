@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/koki-develop/cat-code/compare/v0.1.0...v0.1.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* Adjust cat behavior timings ([74b5d1b](https://github.com/koki-develop/cat-code/commit/74b5d1b26d9cfa67c5f2f373adcf03ed4798271d))
+
 ## [0.1.0](https://github.com/koki-develop/cat-code/compare/v0.0.2...v0.1.0) (2025-06-27)
 
 
