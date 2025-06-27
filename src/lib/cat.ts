@@ -1,4 +1,4 @@
-import type { Action } from "../components/types";
+import type { Action, CatConfig } from "../components/types";
 import { FileEditor } from "./fileEditor";
 
 export type CatResponse = {
@@ -60,7 +60,13 @@ const emotionKeywords: Record<Emotion, string[]> = {
 } as const;
 
 export class Cat {
-  private fileEditor = new FileEditor();
+  private fileEditor: FileEditor;
+  private safeMode: boolean;
+
+  constructor(config: CatConfig) {
+    this.safeMode = config.safeMode;
+    this.fileEditor = new FileEditor({ safeMode: config.safeMode });
+  }
 
   private detectEmotion(message: string): Emotion | null {
     const lowerMessage = message.toLowerCase();
@@ -99,7 +105,7 @@ export class Cat {
       if (diff) {
         return {
           text: catText,
-          action: { type: "edit", diff },
+          action: { type: "edit", diff, safeMode: this.safeMode },
         };
       }
     }

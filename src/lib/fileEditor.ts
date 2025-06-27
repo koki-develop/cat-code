@@ -2,7 +2,7 @@ import { createReadStream, createWriteStream } from "node:fs";
 import { rename } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import { glob } from "glob";
-import type { Diff, FileDiff } from "../components/types";
+import type { Diff, FileDiff, FileEditorConfig } from "../components/types";
 import { Git } from "./git";
 
 const textFileExtensions: string[] = [
@@ -54,6 +54,11 @@ const textFileExtensions: string[] = [
 
 export class FileEditor {
   private git = new Git();
+  private safeMode: boolean;
+
+  constructor(config: FileEditorConfig) {
+    this.safeMode = config.safeMode;
+  }
   // Text file extension patterns
   private readonly textFilePatterns = textFileExtensions.map(
     (ext) => `**/*.${ext}`,
@@ -204,8 +209,14 @@ export class FileEditor {
     writeStream.end();
     await new Promise<void>((resolve) => writeStream.on("finish", resolve));
 
-    // Atomically replace original file
-    await rename(tempPath, filePath);
+    // Atomically replace original file (only if not in safe mode)
+    if (!this.safeMode) {
+      await rename(tempPath, filePath);
+    } else {
+      // In safe mode, delete the temporary file
+      const { unlink } = await import("node:fs/promises");
+      await unlink(tempPath);
+    }
 
     return { diffs };
   }

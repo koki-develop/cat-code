@@ -18,10 +18,11 @@ const program = new Command();
 program
   .name("cat-code")
   .version(packageJson.version)
-  .action(() => {
+  .option("--safe", "enable safe mode (no actual file modifications)")
+  .action((options) => {
     console.log(logo);
 
-    render(<App />, {
+    render(<App safeMode={!!options.safe} />, {
       exitOnCtrlC: false, // Disable default Ctrl+C exit behavior
     });
   });

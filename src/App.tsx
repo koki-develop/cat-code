@@ -7,9 +7,12 @@ import { Spinner } from "./components/Spinner";
 import type { Message } from "./components/types";
 import { Cat } from "./lib/cat";
 
-const cat = new Cat();
+type AppProps = {
+  safeMode: boolean;
+};
 
-export const App: React.FC = () => {
+export const App: React.FC<AppProps> = ({ safeMode }) => {
+  const cat = new Cat({ safeMode });
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);

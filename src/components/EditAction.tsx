@@ -52,6 +52,9 @@ export const EditAction: React.FC<EditActionProps> = ({ action }) => {
       <Text>
         <Text color="green">⏺</Text> <Text bold>Update</Text>(
         {action.diff.fileName})
+        {action.safeMode && (
+          <Text color="yellow"> [SAFE MODE - No actual changes]</Text>
+        )}
       </Text>
       <Box paddingLeft={2} paddingY={1}>
         <Text>{formatDiffs(action.diff.diffs)}</Text>
