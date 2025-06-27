@@ -2,7 +2,7 @@
   "name": "cat-code",
   "module": "src/index.tsx",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "koki-develop <kou.pg.0131@gmail.com>",
   "homepage": "https://github.com/koki-develop/cat-code",
   "repository": {
