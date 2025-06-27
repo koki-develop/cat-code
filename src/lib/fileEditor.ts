@@ -1,4 +1,6 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { createReadStream, createWriteStream } from "node:fs";
+import { rename } from "node:fs/promises";
+import { createInterface } from "node:readline";
 import { glob } from "glob";
 import type { Diff, FileDiff } from "../components/types";
 import { Git } from "./git";
@@ -93,63 +95,97 @@ export class FileEditor {
   }
 
   /**
-   * Edit file content in a cat-like manner
+   * Replace a random word in a line with a cat word
    */
-  private editFileContent(content: string): string {
-    const words = content.match(/\w+/g);
-    if (!words || words.length === 0) return content;
+  private replaceRandomWord(line: string): {
+    edited: string;
+    original: string;
+    replaced: boolean;
+  } {
+    const words = line.match(/\b\w+\b/g);
+    if (!words || words.length === 0) {
+      return { edited: line, original: line, replaced: false };
+    }
 
-    const targetWord = words[
-      Math.floor(Math.random() * words.length)
-    ] as string;
+    // Select random word to replace
+    const targetIndex = Math.floor(Math.random() * words.length);
+    const targetWord = words[targetIndex] as string;
+
+    // Select random cat word
     const catWord = this.catWords[
       Math.floor(Math.random() * this.catWords.length)
     ] as string;
 
-    // Replace up to 3 locations
-    let replacedContent = content;
-    let replacementCount = 0;
-    const maxReplacements = 3;
+    // Replace only the first occurrence of the selected word
+    let replacementDone = false;
+    const edited = line.replace(new RegExp(`\\b${targetWord}\\b`), (match) => {
+      if (!replacementDone) {
+        replacementDone = true;
+        return catWord;
+      }
+      return match;
+    });
 
-    replacedContent = replacedContent.replace(
-      new RegExp(`\\b${targetWord}\\b`, "g"),
-      (match) => {
-        if (replacementCount < maxReplacements) {
-          replacementCount++;
-          return catWord;
-        }
-        return match;
-      },
-    );
-
-    return replacedContent;
+    return {
+      edited,
+      original: line,
+      replaced: edited !== line,
+    };
   }
 
   /**
-   * Generate structured diff
+   * Edit file efficiently using readline
    */
-  private generateDiffs(original: string, edited: string): Diff[] {
-    const originalLines = original.split("\n");
-    const editedLines = edited.split("\n");
+  private async editFileReadline(filePath: string): Promise<{ diffs: Diff[] }> {
+    const tempPath = `${filePath}.tmp`;
     const diffs: Diff[] = [];
 
-    const maxLines = Math.max(originalLines.length, editedLines.length);
+    let totalReplacements = 0;
+    const maxReplacements = 3;
+    const replacementProbability = 0.2; // 20% chance to edit a line
 
-    for (let i = 0; i < maxLines; i++) {
-      const rowNumber = i + 1;
-      const originalLine = originalLines[i] || "";
-      const editedLine = editedLines[i] || "";
+    // Process file line by line
+    const readStream = createReadStream(filePath);
+    const writeStream = createWriteStream(tempPath);
+    const rl = createInterface({
+      input: readStream,
+      crlfDelay: Number.POSITIVE_INFINITY,
+    });
 
-      if (originalLine !== editedLine) {
-        diffs.push({
-          rowNumber,
-          a: originalLine,
-          b: editedLine,
-        });
+    let lineNumber = 0;
+    for await (const line of rl) {
+      lineNumber++;
+      let editedLine = line;
+
+      // Decide whether to edit this line
+      if (
+        totalReplacements < maxReplacements &&
+        Math.random() < replacementProbability
+      ) {
+        const result = this.replaceRandomWord(line);
+
+        if (result.replaced) {
+          editedLine = result.edited;
+          totalReplacements++;
+
+          diffs.push({
+            rowNumber: lineNumber,
+            a: result.original,
+            b: editedLine,
+          });
+        }
       }
+
+      writeStream.write(`${editedLine}\n`);
     }
 
-    return diffs;
+    writeStream.end();
+    await new Promise<void>((resolve) => writeStream.on("finish", resolve));
+
+    // Atomically replace original file
+    await rename(tempPath, filePath);
+
+    return { diffs };
   }
 
   /**
@@ -161,17 +197,9 @@ export class FileEditor {
       return null;
     }
 
-    // Read file content
-    const originalContent = await readFile(filePath, "utf-8");
+    // Edit file using readline for efficiency
+    const { diffs } = await this.editFileReadline(filePath);
 
-    // Edit
-    const editedContent = this.editFileContent(originalContent);
-
-    // Write to file
-    await writeFile(filePath, editedContent, "utf-8");
-
-    // Generate structured diff
-    const diffs = this.generateDiffs(originalContent, editedContent);
     if (diffs.length === 0) {
       return null;
     }
