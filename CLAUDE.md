@@ -107,3 +107,31 @@ The cat response system uses emotion detection and vocabulary mapping:
 - **Sleepy**: ﾆｬ…, ﾌﾆｬ~, ﾆｬ~ﾝ (for tired, sleep)
 - **Hungry**: ﾆｬｵｫﾝ, ﾐｬｰｵ, ﾆｬﾝﾆｬﾝ! (for food, eating)
 - **Default**: ﾆｬｰ, ﾆｬﾝ, ﾐｬｰ (for unrecognized input)
+
+## File Editing System
+
+The cat occasionally "plays" with code files, making random edits and showing diffs:
+
+### Core Architecture
+- **FileEditor Class** (`src/lib/fileEditor.ts`): Handles file selection, editing, and diff generation
+- **Git Integration** (`src/lib/git.ts`): Abstraction layer for git operations using simple-git
+- **EditAction Component** (`src/components/EditAction.tsx`): Displays file diffs with Claude Code-style formatting
+- **Action System** (`src/components/types.ts`): Structured type definitions for extensible action handling
+
+### File Editing Behavior
+- **Trigger Probability**: 20% chance during cat responses (configurable in `cat.ts`)
+- **File Selection**: Prefers git-tracked files, falls back to glob patterns for text files
+- **Cat Word Replacement**: Randomly replaces up to 3 instances of words with cat sounds (ﾆｬｰ, ﾐｬｰ, etc.)
+- **Supported File Types**: txt, md, js, jsx, ts, tsx, json, css, html, xml, yml, yaml
+
+### Diff Display System
+- **ANSI256 Colors**: Uses ansi256(52) for deletions (red background), ansi256(22) for additions (green background)
+- **Structured Format**: Line numbers in gray, `- content` for deletions, `+ content` for additions
+- **Component Integration**: EditAction appears before cat message when file editing occurs
+- **Message Architecture**: Uses action-based message system with optional action field
+
+### Git Integration Patterns
+- **Repository Detection**: Automatically detects git initialization status
+- **File Tracking**: Uses `git ls-files` for tracked file enumeration
+- **Fallback Strategy**: Glob-based file discovery when git is unavailable
+- **Text File Filtering**: Consistent file type detection across both git and glob methods
