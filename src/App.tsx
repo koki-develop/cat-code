@@ -38,11 +38,13 @@ export const App: React.FC<AppProps> = ({ safeMode }) => {
           timeoutRef.current = null;
         }, 3000);
       } else {
-        // Second Ctrl+C within timeout - exit immediately
+        // Second Ctrl+C within timeout - hide warning and exit after re-render
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
         }
-        exit();
+        setShowExitWarning(false);
+        // Wait for re-render before exiting
+        setTimeout(() => exit(), 0);
       }
     } else if (showExitWarning) {
       // Cancel Ctrl+C exit when any other input is detected
