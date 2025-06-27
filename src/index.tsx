@@ -21,7 +21,9 @@ program
   .action(() => {
     console.log(logo);
 
-    render(<App />);
+    render(<App />, {
+      exitOnCtrlC: false, // Disable default Ctrl+C exit behavior
+    });
   });
 
 program.parse(process.argv);

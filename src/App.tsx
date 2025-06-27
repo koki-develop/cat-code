@@ -1,6 +1,6 @@
-import { Box } from "ink";
+import { Box, Text, useApp, useInput } from "ink";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatHistory } from "./components/ChatHistory";
 import { InputField } from "./components/InputField";
 import { Spinner } from "./components/Spinner";
@@ -13,6 +13,52 @@ export const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showExitWarning, setShowExitWarning] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { exit } = useApp();
+
+  // Handle double Ctrl+C exit
+  useInput((input, key) => {
+    if (key.ctrl && input === "c") {
+      if (!showExitWarning) {
+        setShowExitWarning(true);
+
+        // Clear timeout if it exists
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+
+        // Set timeout to reset warning after 3 seconds
+        timeoutRef.current = setTimeout(() => {
+          setShowExitWarning(false);
+          timeoutRef.current = null;
+        }, 3000);
+      } else {
+        // Second Ctrl+C within timeout - exit immediately
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        exit();
+      }
+    } else if (showExitWarning) {
+      // Cancel Ctrl+C exit when any other input is detected
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setShowExitWarning(false);
+    }
+  });
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = async () => {
     if (input.trim() === "" || isLoading) return;
@@ -53,6 +99,13 @@ export const App: React.FC = () => {
         onSubmit={handleSubmit}
         showCursor={!isLoading}
       />
+      {showExitWarning && (
+        <Box paddingX={1} marginTop={1}>
+          <Text color="yellow">
+            Press Ctrl+C again within 3 seconds to exit
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };
