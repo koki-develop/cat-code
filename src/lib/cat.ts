@@ -239,7 +239,7 @@ export class Cat {
   }
 
   private getRandomThinkingTime(): number {
-    return Math.floor(Math.random() * 1000) + 300; // 300-1300ms
+    return Math.floor(Math.random() * 500) + 300; // 300-800ms
   }
 
   async response(message: string): Promise<CatResponse> {
@@ -249,8 +249,8 @@ export class Cat {
     const emotion = this.detectEmotion(message);
     const catText = this.getRandomResponse(emotion);
 
-    // Execute file editing with random probability (20% chance)
-    const shouldEditFile = Math.random() < 0.2;
+    // Execute file editing with random probability (30% chance)
+    const shouldEditFile = Math.random() < 0.3;
 
     if (shouldEditFile) {
       const diff = await this.fileEditor.edit();
