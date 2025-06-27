@@ -22,7 +22,22 @@ program
   .action((options) => {
     console.log(logo);
 
-    render(<App safeMode={!!options.safe} />, {
+    const safeMode = !!options.safe;
+    if (!safeMode) {
+      console.log(
+        chalk.yellow(
+          " ⚠️ WARNING: Safe mode is disabled. The cat may modify your files!",
+        ),
+      );
+      console.log(
+        chalk.gray(
+          "   Use --safe flag to preview changes without modifying files.",
+        ),
+      );
+      console.log();
+    }
+
+    render(<App safeMode={safeMode} />, {
       exitOnCtrlC: false, // Disable default Ctrl+C exit behavior
     });
   });
