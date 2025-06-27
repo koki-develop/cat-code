@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Format**: `bun run fmt` - Formats code using Biome with unsafe fixes
 - **Type check**: `bun run typecheck` - Runs TypeScript compiler without emitting files
 - **Test locally**: `bun run ./dist/index.js` - Run the built CLI locally
+- **Test safe mode**: `bun run ./dist/index.js --safe` - Run in safe mode (no file modifications)
 - **Run tests**: `bun test` - Runs all test files (*.spec.ts)
 - **Run single test**: `bun test src/lib/util.spec.ts` - Run specific test file
 - **Test cat**: `bun test src/lib/cat.spec.ts` - Run cat vocabulary and emotion detection tests
@@ -56,7 +57,8 @@ The custom InputField component supports comprehensive terminal-style keybinding
 - **Cat Behavior**: Cat class provides contextual responses based on detected emotions, with random delay (300-1300ms) for realistic interaction
 - **Message Styling**: User messages prefixed with "> " in gray, cat messages prefixed with "⏺ " in cyan
 - **Multi-line Support**: Both user and cat messages use indent utility for proper 2+ line formatting
-- **Exit Control**: Double Ctrl+C required within 500ms to exit, single Ctrl+C clears input
+- **Exit Control**: Double Ctrl+C required within 3 seconds to exit, single Ctrl+C clears input and shows exit warning
+- **Clean Exit**: Exit warning is hidden before termination using setTimeout to wait for React re-render
 
 ### Build Process
 The build process creates a standalone executable CLI tool:
@@ -139,3 +141,23 @@ The cat occasionally "plays" with code files, making random edits and showing di
 - **File Tracking**: Uses `git ls-files` for tracked file enumeration
 - **Fallback Strategy**: Glob-based file discovery when git is unavailable
 - **Text File Filtering**: Consistent file type detection across both git and glob methods
+
+## Safe Mode Implementation
+
+The application supports a `--safe` flag that prevents actual file modifications while still showing diffs:
+
+### CLI Integration
+- **Flag Definition**: `--safe` option added to Commander.js configuration
+- **Warning System**: Displays yellow warning when safe mode is disabled at startup
+- **Type Safety**: Uses `CatConfig` and `FileEditorConfig` types for configuration objects
+
+### Safe Mode Behavior
+- **File Editor**: Creates temporary files and generates diffs but skips file replacement in safe mode
+- **UI Indicators**: EditAction component shows `[SAFE MODE - No actual changes]` indicator
+- **Action System**: `EditAction` type includes `safeMode: boolean` field for UI state
+- **Configuration Flow**: CLI → App → Cat → FileEditor with proper type safety
+
+### Implementation Details
+- **Constructor Pattern**: Cat and FileEditor classes use config object parameters instead of boolean flags
+- **State Propagation**: Safe mode state flows through component hierarchy via props
+- **File Cleanup**: Temporary files are properly cleaned up in safe mode using `unlink()`
