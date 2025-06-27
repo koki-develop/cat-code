@@ -18,6 +18,7 @@ const program = new Command();
 program
   .name("cat-code")
   .version(packageJson.version)
+  .description("The Coding Agent powered by Cat")
   .option("--safe", "enable safe mode (no actual file modifications)")
   .action((options) => {
     console.log(logo);
