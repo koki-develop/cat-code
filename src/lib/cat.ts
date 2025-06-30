@@ -211,6 +211,19 @@ const emotionKeywords: Record<Emotion, string[]> = {
   ],
 } as const;
 
+const ultrathinkKeywords = [
+  "ultrathink",
+  "think very hard",
+  "think super hard",
+  "think really hard",
+  "think longer",
+  "think intensely",
+  "think harder",
+  "熟考",
+  "深く考えて",
+  "しっかり考えて",
+] as const;
+
 export class Cat {
   private fileEditor: FileEditor;
   private safeMode: boolean;
@@ -238,12 +251,15 @@ export class Cat {
     return responses[index] as string;
   }
 
-  private getRandomThinkingTime(): number {
-    return Math.floor(Math.random() * 500) + 300; // 300-800ms
+  private hasUltrathinkKeyword(message: string): boolean {
+    return ultrathinkKeywords.some((keyword) => message.includes(keyword));
   }
 
   async response(message: string): Promise<CatResponse> {
-    const thinkingTime = this.getRandomThinkingTime();
+    const isUltrathink = this.hasUltrathinkKeyword(message);
+    const thinkingTime = isUltrathink
+      ? Math.floor(Math.random() * 2000) + 3000 // 3000-5000ms for ultrathink
+      : Math.floor(Math.random() * 500) + 300; // 300-800ms
     await new Promise((resolve) => setTimeout(resolve, thinkingTime));
 
     const emotion = this.detectEmotion(message);
