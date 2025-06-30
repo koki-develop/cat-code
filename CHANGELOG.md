@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/koki-develop/cat-code/compare/v0.1.1...v0.2.0) (2025-06-30)
+
+
+### Features
+
+* Add ultrathink feature for extended thinking time ([#5](https://github.com/koki-develop/cat-code/issues/5)) ([fc62833](https://github.com/koki-develop/cat-code/commit/fc628337db7df574a98a37c80e77f45f7a3e2b9c))
+
 ## [0.1.1](https://github.com/koki-develop/cat-code/compare/v0.1.0...v0.1.1) (2025-06-27)
 
 
