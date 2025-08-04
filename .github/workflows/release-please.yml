@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
     if: ${{ needs.release-please.outputs.should-release == 'true' }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -46,12 +47,5 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Create .npmrc
-        run: |
-          (
-            # shellcheck disable=SC2016
-            echo '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}'
-            echo 'registry=https://registry.npmjs.org'
-          ) > .npmrc
+        run: echo 'registry=https://registry.npmjs.org' > .npmrc
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
