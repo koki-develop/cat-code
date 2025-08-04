@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/koki-develop/cat-code/compare/v0.2.0...v0.2.1) (2025-08-04)
+
+
+### Features
+
+* Release ([21231d4](https://github.com/koki-develop/cat-code/commit/21231d4fe30a4d4caf7bac8af044b1e30630664e))
+
 ## [0.2.0](https://github.com/koki-develop/cat-code/compare/v0.1.1...v0.2.0) (2025-06-30)
 
 
