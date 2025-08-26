@@ -34,7 +34,7 @@
     "simple-git": "3.28.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.5",
+    "@biomejs/biome": "2.2.2",
     "@types/bun": "1.2.19",
     "@types/react": "19.1.8",
     "husky": "9.1.7",
